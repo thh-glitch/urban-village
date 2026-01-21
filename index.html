@@ -10,6 +10,7 @@
             --fg: #e0e0e0;
             --accent: #00ff9d; /* Cyberpunk Green */
             --danger: #ff3333;
+            --warn: #ffcc00;
             --mono: 'Courier New', Courier, monospace;
             --ease: cubic-bezier(0.23, 1, 0.32, 1);
         }
@@ -76,16 +77,13 @@
         .img-box img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* 確保圖片填滿且不變形 */
+            object-fit: cover;
             display: block;
             transition: transform 0.5s ease;
         }
 
-        .img-box:hover img {
-            transform: scale(1.05); /* 滑鼠懸停微放大效果 */
-        }
+        .img-box:hover img { transform: scale(1.05); }
 
-        /* 圖片載入失敗時的提示文字 */
         .img-error-msg {
             display: none;
             color: #666;
@@ -143,7 +141,7 @@
             padding: 1rem;
             border-left: 3px solid var(--accent);
             background: rgba(0,0,0,0.3);
-            display: none; /* 預設隱藏 */
+            display: none;
         }
 
         /* --- 評價滑桿區 --- */
@@ -164,6 +162,45 @@
         .vote-renovate { background: #33ccff; color: #000; }
         .vote-btn:hover, .vote-btn.active { opacity: 1; transform: scale(1.02); }
 
+        /* --- PEEL 分析區樣式 --- */
+        .peel-structure {
+            margin-top: 1.5rem;
+            border: 1px solid #444;
+            background: #111;
+        }
+        .peel-row {
+            display: flex;
+            border-bottom: 1px solid #333;
+        }
+        .peel-row:last-child { border-bottom: none; }
+        .peel-label {
+            width: 50px;
+            padding: 1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid #333;
+        }
+        .peel-content { padding: 1rem; font-size: 0.9rem; color: #ccc; }
+        
+        .p-tag { color: var(--accent); background: rgba(0,255,157,0.1); }
+        .e1-tag { color: #33ccff; background: rgba(51,204,255,0.1); }
+        .e2-tag { color: #ffcc00; background: rgba(255,204,0,0.1); }
+        .l-tag { color: #ff33cc; background: rgba(255,51,204,0.1); }
+
+        textarea {
+            width: 100%; 
+            background: #111; 
+            border: 1px solid #444; 
+            color: #fff; 
+            padding: 1rem; 
+            margin-top: 0.5rem; 
+            height: 120px;
+            font-family: inherit;
+        }
+        textarea:focus { outline: none; border-color: var(--accent); }
+
     </style>
 </head>
 <body>
@@ -181,14 +218,11 @@
             
             <div class="img-box">
                 <img src="village.webp" alt="城中村握手樓高密度建築" onerror="this.style.display='none'; document.querySelector('.img-error-msg').style.display='block';">
-                
                 <div class="img-error-msg">
                     ⚠️ 圖片載入失敗<br>請確認資料夾內是否有 <strong>village.webp</strong> 檔案
                 </div>
             </div>
-
             <p style="font-size: 0.9rem; color: #aaa;">思考引導：留意樓宇之間的距離（Distance）與光線（Light）。</p>
-            
             <button class="choice-btn" onclick="goToStep(2)" style="text-align: center; margin-top: 2rem; border-color: var(--accent);">
                 >> 確認特徵，進入成因分析 >>
             </button>
@@ -197,22 +231,14 @@
         <section id="step-2" class="card">
             <h2>02. 概念形成 (CONCEPT)</h2>
             <p>為什麼現代化城市中會殘留這些「農村」？請選擇最合理的成因假設：</p>
-
             <div id="quiz-options">
-                <button class="choice-btn" onclick="checkConcept(this, false)">
-                    [A] 政府為了保留傳統農耕文化，刻意不開發。
-                </button>
-                <button class="choice-btn" onclick="checkConcept(this, true)">
-                    [B] 城市擴張速度過快，繞過了原有村落，形成「被包圍」的狀態。
-                </button>
-                <button class="choice-btn" onclick="checkConcept(this, false)">
-                    [C] 村民為了防禦城市人，建造了圍牆。
-                </button>
+                <button class="choice-btn" onclick="checkConcept(this, false)">[A] 政府為了保留傳統農耕文化，刻意不開發。</button>
+                <button class="choice-btn" onclick="checkConcept(this, true)">[B] 城市擴張速度過快，繞過了原有村落，形成「被包圍」。</button>
+                <button class="choice-btn" onclick="checkConcept(this, false)">[C] 村民為了防禦城市人，建造了圍牆。</button>
             </div>
-
             <div id="concept-feedback" class="feedback-box">
                 <h3 class="accent">✅ 正確：二元結構 (Dual Structure)</h3>
-                <p>這就是所謂的<strong>「城市包圍農村」</strong>。雖然地理位置在市中心，但土地權屬仍保留集體所有制，導致規劃管理與城市脫節。</p>
+                <p>這就是所謂的<strong>「城市包圍農村」</strong>。雖然地理位置在市中心，但土地權屬仍保留集體所有制。</p>
                 <button class="choice-btn" onclick="goToStep(3)" style="margin-top: 1rem; border: 1px dashed var(--fg);">
                     >> 下一步：進入內部考察
                 </button>
@@ -221,8 +247,7 @@
 
         <section id="step-3" class="card">
             <h2>03. 角色視角剖析 (ANALYSIS)</h2>
-            <p>城中村是「毒瘤」還是「跳板」？這取決於你是誰。<br>請點擊下方角色卡片以獲取考察數據：</p>
-
+            <p>請點擊下方角色卡片以獲取考察數據：</p>
             <div class="role-grid">
                 <div class="role-card" onclick="revealRole('worker')">
                     <div style="font-size: 2rem;">👷</div>
@@ -235,11 +260,9 @@
                     <small>City Planner</small>
                 </div>
             </div>
-
             <div id="data-display" class="feedback-box" style="margin-top: 1.5rem; border-left-color: #fff;">
                 <p style="color: #666;">[ 等待數據接入... 請點擊上方角色 ]</p>
             </div>
-
             <button id="btn-step-4" class="choice-btn hidden" onclick="goToStep(4)" style="margin-top: 2rem; display: none;">
                 >> 綜合所有數據，進行決策 >>
             </button>
@@ -250,132 +273,210 @@
             <p>面對城中村問題，作為決策者，你傾向哪種方案？</p>
 
             <div class="vote-section">
-                <button class="vote-btn vote-demolish" onclick="vote('demolish')">方案 A：全面拆除重建 (Demolition)</button>
-                <button class="vote-btn vote-renovate" onclick="vote('renovate')">方案 B：原地綜合整治 (Renovation)</button>
+                <button class="vote-btn vote-demolish" onclick="vote('demolish')">方案 A：全面拆除重建</button>
+                <button class="vote-btn vote-renovate" onclick="vote('renovate')">方案 B：原地綜合整治</button>
             </div>
 
-            <div id="debate-feedback" class="feedback-box">
-                </div>
+            <div id="debate-feedback" class="feedback-box" style="margin-bottom: 1.5rem;"></div>
 
-            <div id="final-reflection" style="display: none; margin-top: 2rem;">
-                <p><strong>📝 最終反思：</strong><br>請回應上述挑戰，你會如何平衡「經濟發展」與「社會公義」？</p>
-                <textarea style="width: 100%; background: #111; border: 1px solid #444; color: #fff; padding: 1rem; margin-top: 0.5rem; height: 100px;" placeholder="在此輸入你的觀點..."></textarea>
+            <div id="final-reflection" style="display: none;">
+                <p><strong>📝 最終反思 (PEEL 練習)：</strong><br>請回應上述挑戰，你會如何平衡「經濟發展」與「社會公義」？</p>
+                <textarea id="student-answer" placeholder="建議結構：\n1. 我認為...(Point)\n2. 因為...(Evidence)\n3. 這意味著...(Explanation)\n4. 因此...(Link)"></textarea>
+                
+                <button class="choice-btn" onclick="analyzeAnswer()" style="margin-top: 1rem; background: var(--fg); color: var(--bg); text-align: center; font-weight: bold;">
+                    提交並獲取結構分析 (Analyze)
+                </button>
+            </div>
+
+            <div id="peel-result" class="feedback-box" style="background: rgba(0,0,0,0.8); border: 1px solid var(--accent);">
+                <h3 class="accent">📊 答案結構分析</h3>
+                <p id="ai-comment" style="margin-bottom: 1rem; color: #fff;"></p>
+                
+                <p style="font-size: 0.8rem; color: #888; margin-top: 1rem;">⬇️ 參考下方的 5** 級論證結構 (PEEL)：</p>
+                
+                <div class="peel-structure">
+                    <div class="peel-row">
+                        <div class="peel-label p-tag">P</div>
+                        <div class="peel-content">
+                            <strong>論點 (Point)：</strong><br>
+                            <span id="model-p"></span>
+                        </div>
+                    </div>
+                    <div class="peel-row">
+                        <div class="peel-label e1-tag">E</div>
+                        <div class="peel-content">
+                            <strong>證據 (Evidence)：</strong><br>
+                            <span id="model-e1"></span>
+                        </div>
+                    </div>
+                    <div class="peel-row">
+                        <div class="peel-label e2-tag">E</div>
+                        <div class="peel-content">
+                            <strong>解釋 (Explanation)：</strong><br>
+                            <span id="model-e2"></span>
+                        </div>
+                    </div>
+                    <div class="peel-row">
+                        <div class="peel-label l-tag">L</div>
+                        <div class="peel-content">
+                            <strong>扣題/連接 (Link)：</strong><br>
+                            <span id="model-l"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <p style="margin-top: 1rem; color: #aaa; font-size: 0.9rem;">
+                    💡 <strong>自我檢測：</strong> 你的答案是否包含了具體的「地理概念」（如：士紳化、空間公義、土地承載力）？
+                </p>
             </div>
         </section>
 
     </div>
 
     <script>
+        // --- 全局變量 ---
+        let currentChoice = ''; // 記錄學生的選擇
+        let rolesUnlocked = { worker: false, planner: false };
+
         // --- 導航邏輯 ---
         function goToStep(stepNum) {
-            // 隱藏所有卡片
             document.querySelectorAll('.card').forEach(c => {
                 c.classList.remove('active');
-                c.style.display = 'none'; // 確保動畫重置
+                c.style.display = 'none';
             });
-            
-            // 顯示目標卡片
             const target = document.getElementById('step-' + stepNum);
             target.style.display = 'block';
-            setTimeout(() => target.classList.add('active'), 10); // 微小延遲以觸發 CSS 動畫
-            
-            // 自動捲動
+            setTimeout(() => target.classList.add('active'), 10);
             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        // --- Step 2: 概念測驗邏輯 ---
+        // --- Step 2: 概念測驗 ---
         function checkConcept(btn, isCorrect) {
             const feedback = document.getElementById('concept-feedback');
-            
-            // 重置所有按鈕樣式
             const buttons = document.querySelectorAll('#quiz-options .choice-btn');
+            
             buttons.forEach(b => {
                 b.classList.remove('correct', 'wrong');
-                b.disabled = true; // 鎖定選擇
+                b.disabled = true;
                 b.style.opacity = "0.5";
             });
 
-            // 顯示結果
             btn.style.opacity = "1";
             if (isCorrect) {
                 btn.classList.add('correct');
                 btn.innerHTML += "  ✅";
                 feedback.style.display = 'block';
-                feedback.classList.add('active'); // 觸發動畫
+                feedback.classList.add('active');
             } else {
                 btn.classList.add('wrong');
-                btn.innerHTML += "  ❌ (請再試一次)";
-                // 錯誤時允許重試
+                btn.innerHTML += "  ❌";
                 setTimeout(() => {
-                    buttons.forEach(b => { b.disabled = false; b.style.opacity = "1"; b.classList.remove('wrong'); b.innerHTML = b.innerHTML.replace("  ❌ (請再試一次)", ""); });
+                    buttons.forEach(b => { 
+                        b.disabled = false; 
+                        b.style.opacity = "1"; 
+                        b.classList.remove('wrong'); 
+                        b.innerHTML = b.innerHTML.replace("  ❌", ""); 
+                    });
                 }, 1500);
             }
         }
 
-        // --- Step 3: 角色扮演邏輯 ---
-        let rolesUnlocked = { worker: false, planner: false };
-
+        // --- Step 3: 角色扮演 ---
         function revealRole(role) {
             const display = document.getElementById('data-display');
             const nextBtn = document.getElementById('btn-step-4');
             
             rolesUnlocked[role] = true;
-
-            // 標記選中的卡片
             document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
             event.currentTarget.classList.add('selected');
 
             if (role === 'worker') {
                 display.innerHTML = `
-                    <h4 style="color: #fff;">👷 外來務工者視角 (功能性)</h4>
-                    <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: #ccc;">
-                        <li><strong>低生活成本：</strong>租金僅為周邊公寓的 1/5，讓我有能力留在城市打拼。</li>
-                        <li><strong>社交網絡：</strong>鄰居都是同鄉，互相照應，不像大樓裡那樣冷漠。</li>
-                        <li><strong>方便：</strong>樓下全是便宜的小吃攤，生活極其便利。</li>
-                    </ul>
-                `;
+                    <h4 style="color: #fff;">👷 外來務工者視角</h4>
+                    <ul style="margin-left: 1.5rem; color: #ccc;">
+                        <li><strong>低成本：</strong>租金僅為市區 1/5。</li>
+                        <li><strong>社區網絡：</strong>同鄉聚居，提供情感支援。</li>
+                    </ul>`;
             } else {
                 display.innerHTML = `
-                    <h4 style="color: #fff;">📋 規劃師視角 (問題性)</h4>
-                    <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: #ccc;">
-                        <li><strong>嚴重消防隱患：</strong>「握手樓」導致消防車無法進入，一旦火災後果不堪設想。</li>
-                        <li><strong>基礎設施超負荷：</strong>電線私拉亂接，排水系統經常堵塞。</li>
-                        <li><strong>土地利用低效：</strong>位於黃金地段，卻未能發揮應有的土地價值。</li>
-                    </ul>
-                `;
+                    <h4 style="color: #fff;">📋 規劃師視角</h4>
+                    <ul style="margin-left: 1.5rem; color: #ccc;">
+                        <li><strong>安全隱患：</strong>消防車無法進入。</li>
+                        <li><strong>土地效率：</strong>位於市中心卻未善用價值。</li>
+                    </ul>`;
             }
             display.style.display = 'block';
 
-            // 如果兩個都看過了，解鎖下一步
             if (rolesUnlocked.worker && rolesUnlocked.planner) {
                 nextBtn.style.display = 'block';
                 setTimeout(() => nextBtn.style.opacity = '1', 100);
             }
         }
 
-        // --- Step 4: 評價邏輯 ---
+        // --- Step 4: 評價與 PEEL 分析 ---
         function vote(choice) {
+            currentChoice = choice; // 儲存選擇以便分析使用
             const feedback = document.getElementById('debate-feedback');
             const reflection = document.getElementById('final-reflection');
             const buttons = document.querySelectorAll('.vote-btn');
 
             buttons.forEach(b => b.classList.remove('active'));
-            
             feedback.style.display = 'block';
             reflection.style.display = 'block';
 
             if (choice === 'demolish') {
                 document.querySelector('.vote-demolish').classList.add('active');
                 feedback.innerHTML = `
-                    <h4 class="danger">⚠️ 挑戰 Challenge：紳士化 (Gentrification)</h4>
-                    <p>雖然這解決了安全和市容問題，但<strong>低收入人口將被迫遷離</strong>。他們將失去在城市立足的廉價居所，這是否剝奪了他們的「城市權利」(Right to the City)？</p>
-                `;
+                    <h4 class="danger">⚠️ 挑戰：紳士化 (Gentrification)</h4>
+                    <p>拆除後，原有的低收入居民將被迫遷離，這是否剝奪了他們的生存空間？</p>`;
             } else {
                 document.querySelector('.vote-renovate').classList.add('active');
                 feedback.innerHTML = `
-                    <h4 class="accent">⚠️ 挑戰 Challenge：成本與產權 (Cost & Rights)</h4>
-                    <p>雖然保留了社區肌理，但<strong>改造成本極高</strong>且難以回收。加上產權複雜，誰來支付改善消防和衛生設施的費用？政府？還是村民？</p>
-                `;
+                    <h4 class="accent">⚠️ 挑戰：成本效益 (Cost-Benefit)</h4>
+                    <p>整治需要龐大資金，但產權複雜，誰來買單？這是否會浪費公共財政？</p>`;
+            }
+        }
+
+        function analyzeAnswer() {
+            const userText = document.getElementById('student-answer').value;
+            const resultBox = document.getElementById('peel-result');
+            const comment = document.getElementById('ai-comment');
+            
+            // 簡單的輸入檢查
+            if (userText.length < 10) {
+                alert("請嘗試多寫一點，完整的論述才能進行分析！");
+                return;
+            }
+
+            // 模擬分析過程
+            resultBox.style.display = 'block';
+            resultBox.scrollIntoView({ behavior: 'smooth' });
+
+            // 1. 關鍵詞檢測 (簡單邏輯)
+            let keywords = [];
+            if (userText.includes("成本") || userText.includes("錢")) keywords.push("經濟考量");
+            if (userText.includes("居民") || userText.includes("安置")) keywords.push("社會影響");
+            if (userText.includes("安全") || userText.includes("消防")) keywords.push("環境安全");
+            
+            let feedbackMsg = keywords.length > 0 
+                ? `👍 很好，系統偵測到你提到了 <strong>${keywords.join("、")}</strong> 等關鍵概念。` 
+                : "🤔 你的答案較為簡潔，試著加入更多地理術語（如：空間公義、承載力）。";
+
+            comment.innerHTML = feedbackMsg;
+
+            // 2. 根據立場顯示對應的 PEEL 範文
+            if (currentChoice === 'demolish') {
+                // 如果學生選拆除，範文應該是回應「紳士化」挑戰，堅持拆除但提出補償
+                document.getElementById('model-p').innerText = "雖然拆除會導致居民搬遷，但我仍支持重建方案。";
+                document.getElementById('model-e1').innerText = "根據規劃師數據，城中村存在嚴重的消防隱患，且土地利用效率極低。";
+                document.getElementById('model-e2').innerText = "若不拆除，一旦發生火災將造成無可挽回的生命損失。且長遠來看，都市更新能提升該區的環境質素。";
+                document.getElementById('model-l').innerText = "針對被逼遷者，政府應提供妥善安置，以平衡「城市安全」與「居住權益」。";
+            } else {
+                // 如果學生選保留，範文是回應「成本」挑戰，堅持保留但提出融資
+                document.getElementById('model-p').innerText = "我認為應該進行原地整治，而非盲目拆除。";
+                document.getElementById('model-e1').innerText = "數據顯示，這裡為大量基層勞工提供了僅為市價 1/5 的廉價住所。";
+                document.getElementById('model-e2').innerText = "城中村發揮了重要的「社會緩衝」功能。若強行拆除，勞工將流失，進而推高城市的服務業成本，影響城市競爭力。";
+                document.getElementById('model-l').innerText = "對於整治成本，可引入「公私合營」(PPP) 模式，在保障「空間公義」的同時減輕財政負擔。";
             }
         }
     </script>
