@@ -8,7 +8,7 @@
         :root {
             --bg: #0a0a0a;
             --fg: #e0e0e0;
-            --accent: #00ff9d; /* 改用 Cyberpunk Green 表示數據/探究 */
+            --accent: #00ff9d; /* Cyberpunk Green */
             --danger: #ff3333;
             --mono: 'Courier New', Courier, monospace;
             --ease: cubic-bezier(0.23, 1, 0.32, 1);
@@ -59,26 +59,39 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- 圖片預留區樣式 --- */
-        .img-placeholder-box {
+        /* --- 圖片顯示區 --- */
+        .img-box {
             width: 100%;
             height: 400px;
             background: #111;
-            border: 2px dashed #444;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #666;
+            border: 1px solid #333;
             margin: 1.5rem 0;
             position: relative;
             overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .img-placeholder-box img {
+        .img-box img {
             width: 100%;
             height: 100%;
             object-fit: cover; /* 確保圖片填滿且不變形 */
             display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .img-box:hover img {
+            transform: scale(1.05); /* 滑鼠懸停微放大效果 */
+        }
+
+        /* 圖片載入失敗時的提示文字 */
+        .img-error-msg {
+            display: none;
+            color: #666;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 1rem;
         }
 
         /* --- 互動按鈕 --- */
@@ -166,8 +179,12 @@
             <h2>01. 實地觀察 (OBSERVATION)</h2>
             <p>請分析下方的影像資料。這種高密度的建築形態，在視覺上有什麼特徵？</p>
             
-            <div class="img-placeholder-box">
-                <img src="" alt="等待圖片載入..." onerror="this.style.display='none'; this.parentElement.innerText='[ 系統提示：請將您的 .webp 圖片放入代碼 img src 中 ]'">
+            <div class="img-box">
+                <img src="village.webp" alt="城中村握手樓高密度建築" onerror="this.style.display='none'; document.querySelector('.img-error-msg').style.display='block';">
+                
+                <div class="img-error-msg">
+                    ⚠️ 圖片載入失敗<br>請確認資料夾內是否有 <strong>village.webp</strong> 檔案
+                </div>
             </div>
 
             <p style="font-size: 0.9rem; color: #aaa;">思考引導：留意樓宇之間的距離（Distance）與光線（Light）。</p>
